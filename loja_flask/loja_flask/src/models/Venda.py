@@ -1,4 +1,4 @@
-from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy import DateTime, ForeignKey, Float, String
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 from typing import List
 
@@ -10,10 +10,12 @@ class Venda (Base):
   __tablename__ = "venda"
 
   id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-  quantidade: Mapped[int] = mapped_column()
+  usuario_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"), nullable=False)
+  valor_total: Mapped[Float] = mapped_column(Float(), nullable=False)
   data_venda: Mapped[DateTime] = mapped_column(DateTime())
-  produto_id: Mapped[int] = mapped_column(ForeignKey("produto.id"))
+  forma_pagamento: Mapped[String] = mapped_column(String(), nullable=False)
 
   def __repr__ (self):
-    return str({"id": self.id, "quantidade": self.quantidade, "data_venda": self.data_venda,
-                "produto_id": self.produto_id})
+    return str({"id": self.id, "usuaio_id": self.usuario_id, "data_venda": self.data_venda,
+                "valor_total": self.valor_total, "forma_pagamento": self.forma_pagamento})
+  
