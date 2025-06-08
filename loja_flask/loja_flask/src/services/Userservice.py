@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from models.user import User
+from models.User import User
 from flask_login import LoginManager
 from repository import repository
 
@@ -48,15 +48,4 @@ def update_user (self, user):
           user_exists.User.username = user.username
           user_exists.User.password = user.password
           user_exists.User.name = user.name
-    session.close()
-
-#explicação
-
-def update_user (self, user):
-     session = Session (self.engine)
-     user_exists = self.get_user_by_id (User.id)
-     if (user_exists is not None):
-          user_exists.User.username = user.username
-          user_exists.User.password = user.password
-          user_exists.User.name = user.name
-    session.close()
+          session.close()
