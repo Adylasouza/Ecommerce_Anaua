@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from models.Venda import Venda
-from repositories.Repository import Repository
+from repository.Repository import Repository
 
 class VendaService ():
 

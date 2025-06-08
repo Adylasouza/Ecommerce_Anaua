@@ -1,4 +1,4 @@
-from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy import DateTime, ForeignKey, Float, String
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 from typing import List
 
@@ -15,5 +15,6 @@ class Venda (Base):
   produto_id: Mapped[int] = mapped_column(ForeignKey("produto.id"))
   quantidade: Mapped[int] = mapped_column()
   def __repr__ (self):
-    return str({"id": self.id, "quantidade": self.quantidade, "data_venda": self.data_venda,
-                "produto_id": self.produto_id})
+    return str({"id": self.id, "usuaio_id": self.usuario_id, "data_venda": self.data_venda,
+                "valor_total": self.valor_total, "forma_pagamento": self.forma_pagamento})
+  
