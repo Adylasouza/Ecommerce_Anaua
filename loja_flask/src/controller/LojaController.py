@@ -19,13 +19,15 @@ userService = UserService()
 def hello_world():
     return "<p>Hello, World!</p>", 200
 
+#Rota: http://127.0.0.1:5000
+
 # ====================== PRODUTOS ======================
 
-@loja_blueprint.route("/produtos", methods=["GET"])
+@loja_blueprint.route("/produtos", methods=["GET"]) #Exemplo: http://127.0.0.1:5000/produtos
 def listarProdutos():
     return jsonify(produtoService.listarProdutos()), 200
 
-@loja_blueprint.route("/produtos/<int:id>", methods=["GET"])
+@loja_blueprint.route("/produtos/<int:id>", methods=["GET"]) #Exemplo: http://127.0.0.1:5000/produtos/1
 def listarProdutoPorId(id):
     return jsonify(produtoService.listarProdutoPorId(id)), 200
 
