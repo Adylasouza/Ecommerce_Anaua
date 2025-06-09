@@ -1,49 +1,74 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from src.models.Venda import Venda
+from src.repository.Repository import Repository
+from datetime import datetime
 
-from models.Venda import Venda
-from repository.Repository import Repository
+class VendaService():
 
-class VendaService ():
+    def __init__(self):
+        self.repository = Repository()
 
-  def __init__(self):
-    self.repository = Repository ()
+    # LISTAR TODAS AS VENDAS
+    def listarVendas(self):
+        session = Session(self.repository.engine)
+        stmt = select(Venda)
+        listResp = session.scalars(stmt).all()
+        session.close()
+        return listResp
 
-  #CRUD de venda
-  
-  def listarVendas (self):
-    session = Session(self.repository.engine)
-    stmt = select(Venda) # SELECT * FROM venda;
-    listResp = session.scalars(stmt).all()
-    session.close()
-    return listResp
+    # LISTAR UMA VENDA POR ID
+    def listarVendaPorId(self, id):
+        session = Session(self.repository.engine)
+        stmt = select(Venda).where(Venda.id == id)
+        resp = session.scalars(stmt).first()
+        session.close()
+        return resp
 
-  def listarVendaPorId (self, id):
-    session = Session(self.repository.engine)
-    stmt = select(Venda).where(Venda.id, id) # SELECT * FROM venda WHERE venda.id = id;
-    resp = session.scalars(stmt).one()
-    session.close()
-    return resp
+    # INSERIR NOVA VENDA
+    def inserirVenda(self, data_dict):
+        session = Session(self.repository.engine)
+        try:
+            nova_venda = Venda(
+                usuario_id=data_dict['usuario_id'],
+                data_venda=data_dict.get('data_venda', datetime.utcnow()),
+                produto_id=data_dict['produto_id'],
+                quantidade=data_dict['quantidade']
+            )
+            session.add(nova_venda)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
 
-  def inserirVenda(self, venda):
-    session = Session(self.repository.engine)
-    session.add(venda) # INSERT INTO venda VALUES (ID = , DATAVENDA =, QUANTIDADE = , PRODUTO = );
-    session.commit()
-    session.close()
+    # ATUALIZAR VENDA EXISTENTE
+    def atualizarVenda(self, data_dict):
+        session = Session(self.repository.engine)
+        try:
+            stmt = select(Venda).where(Venda.id == data_dict['id'])
+            vendaExiste = session.scalars(stmt).first()
+            if vendaExiste:
+                vendaExiste.usuario_id = data_dict['usuario_id']
+                vendaExiste.data_venda = data_dict.get('data_venda', vendaExiste.data_venda)
+                vendaExiste.produto_id = data_dict['produto_id']
+                vendaExiste.quantidade = data_dict['quantidade']
+                session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
 
-  def atualizarVenda (self, venda):    
-    session = Session(self.repository.engine)
-    stmt = select(Venda).where(Venda.id, id) # SELECT * FROM venda WHERE venda.id = id;
-    vendaExiste = session.scalars(stmt).one()
-    if (vendaExiste):
-      vendaExiste.nome = venda.nome
-      vendaExiste.descrição = venda.descricao
-      vendaExiste.preco = venda.preco
-      vendaExiste.quantidade = venda.quantidade
-      session.commit() # UPDATE .... 
-    session.close()
-  
-  def removerVendaPorId (self, id):
-    session = Session(self.repository.engine)
-    produtoExiste = session.query(Venda).filter(Venda.id == id).delete() # DELETE FROM venda WHERE venda.id = id;
-    session.commit()
+    # REMOVER VENDA POR ID
+    def removerVendaPorId(self, id):
+        session = Session(self.repository.engine)
+        try:
+            session.query(Venda).filter(Venda.id == id).delete()
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
