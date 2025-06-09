@@ -1,51 +1,69 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from models.User import User
-from flask_login import LoginManager
-from repository import repository
+from src.models.User import User
+from src.repository.Repository import Repository
 
 class UserService:
     
-    def __init__ (self):
-        self.engine = repository().engine # type: ignore
+    def __init__(self):
+        self.engine = Repository().engine
 
-    def get_all_users (self):
-        session = Session (self.engine)
+    # LISTAR TODOS OS USUÁRIOS
+    def get_all_users(self):
+        session = Session(self.engine)
         stmt = select(User)
         userList = session.scalars(stmt).all()
         session.close()
         return userList
 
-    def get_user_by_id (self, id):
-        session = Session (self.engine)
+    # LISTAR USUÁRIO POR ID
+    def get_user_by_id(self, id):
+        session = Session(self.engine)
         stmt = select(User).where(User.id == id)
-        user = session.scalars(stmt).one()
+        user = session.scalars(stmt).first()
         session.close()
         return user
 
-    def get_user_by_username (self, username):
-        session = Session (self.engine)
+    # LISTAR USUÁRIO POR USERNAME
+    def get_user_by_username(self, username):
+        session = Session(self.engine)
         stmt = select(User).where(User.username == username)
-        user = session.scalars(stmt).one()
+        user = session.scalars(stmt).first()
         session.close()
         return user
 
-    def create_user (self, user):
-            session = Session (self.engine)
-            newUser = user (
-            username = user.username,
-            password = user.password,
-            name = user.name,
-        )
-            session.add(newUser)
+    # INSERIR NOVO USUÁRIO
+    def create_user(self, data_dict):
+        session = Session(self.engine)
+        try:
+            new_user = User(
+                username=data_dict['username'],
+                password=data_dict['password'],
+                name=data_dict.get('name', ''),
+                is_authenticated=False,
+                is_active=True,
+                is_anonymous=False
+            )
+            session.add(new_user)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
             session.close()
 
-
-def update_user (self, user):
-     session = Session (self.engine)
-     user_exists = self.get_user_by_id (User.id)
-     if (user_exists is not None):
-          user_exists.User.username = user.username
-          user_exists.User.password = user.password
-          user_exists.User.name = user.name
-          session.close()
+    # ATUALIZAR USUÁRIO EXISTENTE
+    def update_user(self, data_dict):
+        session = Session(self.engine)
+        try:
+            user_exists = self.get_user_by_id(data_dict['id'])
+            if user_exists:
+                user_exists.username = data_dict['username']
+                user_exists.password = data_dict['password']
+                user_exists.name = data_dict.get('name', user_exists.name)
+                session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
