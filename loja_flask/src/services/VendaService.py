@@ -15,7 +15,7 @@ class VendaService:
             venda = Venda(
                 usuario_id=data_dict['usuario_id'],
                 valor_total=data_dict['valor_total'],
-                data_venda=data_dict.get('data_venda', datetime.utcnow())
+                forma_pagamento=data_dict['forma_pagamento']
             )
             db.session.add(venda)
             db.session.commit()
@@ -24,11 +24,11 @@ class VendaService:
             db.session.rollback()
             raise e
 
-    def atualizarVenda(self, data_dict):
+    def atualizarVenda(self, id, data_dict):
         try:
-            venda = Venda.query.get(data_dict['id'])
+            venda = Venda.query.get(id)
             if venda:
-                venda.usuario_id = data_dict['usuario_id']
+                venda.forma_pagamento = data_dict['forma_pagamento']
                 venda.valor_total = data_dict['valor_total']
                 db.session.commit()
                 return True

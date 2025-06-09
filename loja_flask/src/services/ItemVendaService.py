@@ -24,9 +24,9 @@ class ItemVendaService:
             db.session.rollback()
             raise e
 
-    def atualizarItemVenda(self, data_dict):
+    def atualizarItemVenda(self, id, data_dict):
         try:
-            item = ItemVenda.query.get(data_dict['id'])
+            item = ItemVenda.query.get(id)
             if item:
                 item.venda_id = data_dict['venda_id']
                 item.produto_id = data_dict['produto_id']

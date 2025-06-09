@@ -34,9 +34,9 @@ def inserirProduto():
     produtoService.inserirProduto(request.get_json())
     return "Produto inserido", 201
 
-@loja_blueprint.route("/produtos", methods=["PUT"])
-def atualizarProduto():
-    produtoService.atualizarProduto(request.get_json())
+@loja_blueprint.route("/produtos/<int:id>", methods=["PUT"])
+def atualizarProduto(id):
+    produtoService.atualizarProduto(id, request.get_json())
     return "Produto atualizado", 200
 
 @loja_blueprint.route("/produtos/<int:id>", methods=["DELETE"])
@@ -59,9 +59,9 @@ def inserirVenda():
     vendaService.inserirVenda(request.get_json())
     return "Venda inserida", 201
 
-@loja_blueprint.route("/vendas", methods=["PUT"])
-def atualizarVenda():
-    vendaService.atualizarVenda(request.get_json())
+@loja_blueprint.route("/vendas/<int:id>", methods=["PUT"])
+def atualizarVenda(id):
+    vendaService.atualizarVenda(id, request.get_json())
     return "Venda atualizada", 200
 
 @loja_blueprint.route("/vendas/<int:id>", methods=["DELETE"])
@@ -84,9 +84,9 @@ def inserirCategoria():
     categoriaService.inserirCategoria(request.get_json())
     return "Categoria inserida", 201
 
-@loja_blueprint.route("/categorias", methods=["PUT"])
-def atualizarCategoria():
-    categoriaService.atualizarCategoria(request.get_json())
+@loja_blueprint.route("/categorias/<int:id>", methods=["PUT"])
+def atualizarCategoria(id):
+    categoriaService.atualizarCategoria(id, request.get_json())
     return "Categoria atualizada", 200
 
 @loja_blueprint.route("/categorias/<int:id>", methods=["DELETE"])
@@ -96,25 +96,25 @@ def removerCategoriaPorId(id):
 
 # ====================== ITENS DE VENDA ======================
 
-@loja_blueprint.route("/itens_venda", methods=["GET"])
+@loja_blueprint.route("/itens-venda", methods=["GET"])
 def listarItensVenda():
     return jsonify(itemVendaService.listarItemVendas()), 200
 
-@loja_blueprint.route("/itens_venda/<int:id>", methods=["GET"])
+@loja_blueprint.route("/itens-venda/<int:id>", methods=["GET"])
 def listarItemVendaPorId(id):
     return jsonify(itemVendaService.listarItemVendaPorId(id)), 200
 
-@loja_blueprint.route("/itens_venda", methods=["POST"])
+@loja_blueprint.route("/itens-venda", methods=["POST"])
 def inserirItemVenda():
     itemVendaService.inserirItemVenda(request.get_json())
     return "Item de venda inserido", 201
 
-@loja_blueprint.route("/itens_venda", methods=["PUT"])
-def atualizarItemVenda():
-    itemVendaService.atualizarItemVenda(request.get_json())
+@loja_blueprint.route("/itens-venda/<int:id>", methods=["PUT"])
+def atualizarItemVenda(id):
+    itemVendaService.atualizarItemVenda(id, request.get_json())
     return "Item de venda atualizado", 200
 
-@loja_blueprint.route("/itens_venda/<int:id>", methods=["DELETE"])
+@loja_blueprint.route("/itens-venda/<int:id>", methods=["DELETE"])
 def removerItemVendaPorId(id):   
     itemVendaService.removerItemVendaPorId(id)
     return "Item de venda removido", 200
@@ -123,7 +123,7 @@ def removerItemVendaPorId(id):
 
 @loja_blueprint.route("/users", methods=["GET"])
 def listarUsers():
-    return jsonify(userService.listarUser()), 200
+    return jsonify(userService.listarUsers()), 200
 
 @loja_blueprint.route("/users/<int:id>", methods=["GET"])
 def listarUserPorId(id):
@@ -134,9 +134,9 @@ def inserirUser():
     userService.inserirUser(request.get_json())
     return "Usuário inserido", 201
 
-@loja_blueprint.route("/users", methods=["PUT"])
-def atualizarUser():
-    userService.atualizarUser(request.get_json())
+@loja_blueprint.route("/users/<int:id>", methods=["PUT"])
+def atualizarUser(id):
+    userService.atualizarUser(id, request.get_json())
     return "Usuário atualizado", 200
 
 @loja_blueprint.route("/users/<int:id>", methods=["DELETE"])

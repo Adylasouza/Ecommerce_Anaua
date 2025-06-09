@@ -4,12 +4,19 @@ from datetime import datetime
 class Venda(db.Model):
     __tablename__ = 'venda'
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    data_venda = db.Column(db.DateTime, default=datetime.utcnow)
-    valor_total = db.Column(db.Numeric(10, 2))
+    data = db.Column(db.DateTime, default=datetime.utcnow)
+    valor_total = db.Column(db.Float, nullable=False)
+    forma_pagamento = db.Column(db.String(50), nullable=False)
 
     itens = db.relationship('ItemVenda', back_populates='venda', lazy=True)
 
-    def __repr__(self):
-        return f"<Venda {self.id}>"
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'usuario_id': self.usuario_id,
+            'data': self.data.isoformat() if self.data else None,
+            'valor_total': self.valor_total,
+            'forma_pagamento': self.forma_pagamento
+        }

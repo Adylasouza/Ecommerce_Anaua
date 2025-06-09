@@ -23,9 +23,9 @@ class CategoriaService:
             db.session.rollback()
             raise e
 
-    def atualizarCategoria(self, data_dict):
+    def atualizarCategoria(self, id, data_dict):
         try:
-            categoria = Categoria.query.get(data_dict['id'])
+            categoria = Categoria.query.get(id)
             if categoria:
                 categoria.nome = data_dict['nome']
                 categoria.descricao = data_dict.get('descricao', categoria.descricao)

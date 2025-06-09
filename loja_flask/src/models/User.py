@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 class User(db.Model):
     __tablename__ = 'user'
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(255))
@@ -23,5 +23,9 @@ class User(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def __repr__(self):
-        return f"<User {self.username}>"
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'name': self.name,
+        }

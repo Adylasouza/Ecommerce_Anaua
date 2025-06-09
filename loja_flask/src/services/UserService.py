@@ -28,9 +28,9 @@ class UserService:
             db.session.rollback()
             raise e
 
-    def atualizarUser(self, data_dict):
+    def atualizarUser(self, id, data_dict):
         try:
-            user = User.query.get(data_dict['id'])
+            user = User.query.get(id)
             if user:
                 user.username = data_dict['username']
                 if 'password' in data_dict:

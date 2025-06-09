@@ -26,9 +26,9 @@ class ProdutoService:
             db.session.rollback()
             raise e
 
-    def atualizarProduto(self, data_dict):
+    def atualizarProduto(self, id, data_dict):
         try:
-            produto = Produto.query.get(data_dict['id'])
+            produto = Produto.query.get(id)
             if produto:
                 produto.nome = data_dict['nome']
                 produto.descricao = data_dict.get('descricao', produto.descricao)
