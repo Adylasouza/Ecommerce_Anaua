@@ -7,7 +7,7 @@ Este é um projeto web desenvolvido com [Flask](https://flask.palletsprojects.co
 - [Flask](https://flask.palletsprojects.com/) — Framework web leve e flexível em Python
 - [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/) — ORM para integração com bancos de dados
 - [Flasgger](https://github.com/flasgger/flasgger) — Geração de documentação Swagger para APIs
-- [OpenCV](https://opencv.org/) e [NumPy](https://numpy.org/) — Para processamento e manipulação de imagens (quando aplicável)
+- [SQLite](https://sqlite.org/) — Banco de dados leve usado para testes
 - [Jinja2](https://jinja.palletsprojects.com/) — Engine de templates usada pelo Flask
 
 ## 📦 Instalação
@@ -33,31 +33,60 @@ Este é um projeto web desenvolvido com [Flask](https://flask.palletsprojects.co
    pip install -r requirements.txt
    ```
 
-## 🧪 Executando o Projeto
+4. Execute o projeto:
 
-Para iniciar o servidor Flask em modo de desenvolvimento:
+    Para iniciar o servidor Flask em modo de desenvolvimento:
 
-```bash
-python run.py
-```
+    ```bash
+    python run.py
+    ```
 
-A aplicação será iniciada em `http://127.0.0.1:5000/`.
+5. Acesse no navegador:
+
+    A aplicação será iniciada em:
+
+    ```bash
+    http://127.0.0.1:5000/
+    ```
+
+6. Documentação Swagger (auto-gerada):
+
+    ```bash
+    http://127.0.0.1:5000/apidocs
+    ```
 
 ## 📁 Estrutura Básica
 
 ```
 anaua_ecommerce/
-├── app/                # Pacote principal da aplicação Flask
-├── run.py              # Arquivo principal para rodar o servidor
-├── requirements.txt    # Dependências da aplicação
-└── .gitignore          # Arquivos ignorados pelo Git
+│
+├── app/
+│   ├── __init__.py          # Criação da app Flask + Swagger
+│   ├── models/              # Modelos do banco (Produto, Venda, etc.)
+│   ├── services/            # Lógica de negócios isolada (ProdutoService, VendaService...)
+│   └── routes/              # Rotas e endpoints organizados
+│
+├── migrations/              # Controle de migrações do banco
+├── run.py                   # Arquivo principal para iniciar a aplicação
+├── requirements.txt         # Dependências do projeto
+└── README.md                # Este arquivo
 ```
+
+## ✅ Funcionalidades Implementadas
+
+✔️ Cadastro e listagem de Produtos
+✔️ Cadastro e consulta de Categorias
+✔️ Vendas e controle de Itens por Venda
+✔️ Gestão de Usuários (cadastro, edição, exclusão)
+✔️ Integração Swagger (via Flasgger) para testes de API
+✔️ Banco de dados SQLite pronto para uso
+✔️ Separação real das camadas (MVC)
 
 ## 📝 Licença
 
 Este projeto está sob a licença [MIT](https://opensource.org/licenses/MIT). Sinta-se livre para usá-lo, modificá-lo e distribuí-lo.
 
-## 📌 Endpoints da API
+## 🔌 Endpoints da API REST
 
 #### `/produto`
 | Método | Rota                | Descrição                   |
@@ -68,6 +97,9 @@ Este projeto está sob a licença [MIT](https://opensource.org/licenses/MIT). Si
 | PUT    | `/<int:produto_id>` | Atualiza um produto         |
 | DELETE | `/<int:produto_id>` | Remove um produto           |
 
+✔️ Campos obrigatórios: nome, preco, categoria_id
+✔️ Suporta estoque, foto_url, descrição.
+
 #### `/users`
 | Método | Rota          | Descrição                     |
 |--------|---------------|-------------------------------|
@@ -76,6 +108,9 @@ Este projeto está sob a licença [MIT](https://opensource.org/licenses/MIT). Si
 | POST   | `/`           | Cria um novo usuário          |
 | PUT    | `/<int:id>`   | Atualiza dados do usuário     |
 | DELETE | `/<int:id>`   | Remove um usuário             |
+
+✔️ Campos obrigatórios: username, password
+✔️ Campos opcionais: name
 
 #### `/venda`
 | Método | Rota          | Descrição                   |
@@ -86,6 +121,8 @@ Este projeto está sob a licença [MIT](https://opensource.org/licenses/MIT). Si
 | PUT    | `/<int:id>`   | Atualiza uma venda          |
 | DELETE | `/<int:id>`   | Remove uma venda            |
 
+✔️ Campos obrigatórios: usuario_id, valor_total, forma_pagamento
+
 #### `/categoria`
 | Método | Rota            | Descrição                      |
 |--------|-----------------|--------------------------------|
@@ -95,6 +132,8 @@ Este projeto está sob a licença [MIT](https://opensource.org/licenses/MIT). Si
 | PUT    | `/<int:id>`     | Atualiza uma categoria         |
 | DELETE | `/<int:id>`     | Remove uma categoria           |
 
+✔️ Campos obrigatórios: nome, codigo
+
 #### `/itens-venda`
 | Método | Rota            | Descrição                           |
 |--------|-----------------|-------------------------------------|
@@ -103,3 +142,14 @@ Este projeto está sob a licença [MIT](https://opensource.org/licenses/MIT). Si
 | POST   | `/`             | Cria um novo item de venda          |
 | PUT    | `/<int:id>`     |Atualiza um item de venda existente  |
 | DELETE | `/<int:id>`     | Remove um item de venda             |
+
+✔️ Campos obrigatórios: venda_id, produto_id, quantidade, preco_unitario
+
+📌 Observações
+
+Para alterar o banco, edite o arquivo de configuração em app/__init__.py.
+
+Documentação Swagger acessível em http://127.0.0.1:5000/apidocs
+
+Testado com Python 3.12+ e Flask 3.1+
+
