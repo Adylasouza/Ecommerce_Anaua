@@ -1,4 +1,5 @@
 from flask import Flask
+from flasgger import Swagger
 from models import init_app
 from controller.LojaController import loja_blueprint
 
@@ -8,6 +9,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializa o banco de dados e modelos
 init_app(app)
+swagger = Swagger(app)
 
 # Registra o Blueprint do controller
 app.register_blueprint(loja_blueprint)
